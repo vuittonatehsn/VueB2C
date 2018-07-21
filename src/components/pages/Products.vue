@@ -2,7 +2,7 @@
 <div>
     <div class="text-right mt-4">
         <!-- <button class="btn btn-primary"  data-toggle="modal" data-target="#productModal">建立新產品</button> -->
-        <button class="btn btn-primary"  @click="openModal">建立新產品</button>
+        <button class="btn btn-primary"  @click="openModal(true)">建立新產品</button>
     </div>
     <table class="table mt-4">
         <thead>
@@ -26,7 +26,10 @@
                     <span v-if="item.is_enabled" class="text-success">啟動</span>
                     <span v-else>未啟動</span>
                 </td>
-                <td><button class="btn btn-outline-primary btn-sm">編輯</button></td>
+                <td>
+                    <button class="btn btn-outline-primary btn-sm" @click="openModal(false, item)">編輯</button>
+                    <button class="btn btn-outline-danger btn-sm" @click="openDelProductModal(item)">刪除</button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -136,7 +139,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class="modal fade" id="delProductModal" tabindex="-1" role="dialog"
+    <div class="modal fade" id="delProductModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content border-0">
@@ -158,7 +161,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -173,7 +176,8 @@ export default {
             tempProduct:{},
             status:{
                 fileUploading:false
-            }
+            },
+            isNew: false
         };
     },
     methods:{
@@ -188,8 +192,15 @@ export default {
                 }
             })
         },
-        openModal(){
-            $('#productModal').modal('show')
+        openModal(isNew, item){
+            if (isNew) {
+                this.tempProduct = {};
+                this.isNew = true;
+            } else {
+                this.tempProduct = Object.assign({}, item);
+                this.isNew = false;
+            }
+            $('#productModal').modal('show');
         },
         updateProduct(){
             let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product`; // 'http://localhost:3000/api/casper/products';
@@ -201,20 +212,55 @@ export default {
             }
             console.log(process.env.APIPATH, process.env.CUSTOMPATH);
             this.$http[httpMethod](api, { data: vm.tempProduct }).then((response) => {
+                
                 console.log(response.data);
                 if (response.data.success) {
-                $('#productModal').modal('hide');
-                vm.getProducts();
+                    
                 } else {
+                    console.log('新增失敗');
+                }
                 $('#productModal').modal('hide');
                 vm.getProducts();
-                console.log('新增失敗');
-                }
-                // vm.products = response.data.products;
             });
         },
+        openDelProductModal(item) {
+            const vm = this;
+            $('#delProductModal').modal('show');
+            vm.tempProduct = Object.assign({}, item);
+        }, 
+        delProduct() {
+            const vm = this;
+            const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product/${vm.tempProduct.id}`;
+            this.$http.delete(url).then((response) => {
+                console.log(response, vm.tempProduct);
+                $('#delProductModal').modal('hide');
+                vm.isLoading = false;
+                this.getProducts();
+            });
+        }, 
         uploadFile(){
-
+            console.log(this);
+            const uploadedFile = this.$refs.files.files[0];
+            const vm = this;
+            const formData = new FormData();
+            formData.append('file-to-upload', uploadedFile);
+            const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/upload`;
+            vm.status.fileUploading = true;
+            this.$http.post(url, formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data',
+                },
+            }).then((response) => {
+                console.log(response.data);
+                vm.status.fileUploading = false;
+                if (response.data.success) {
+                // vm.tempProduct.imageUrl = response.data.imageUrl;
+                // console.log(vm.tempProduct);
+                vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
+                } else {
+                this.$bus.$emit('messsage:push', response.data.message, 'danger');
+                }
+            });
         }
     },
     created(){
