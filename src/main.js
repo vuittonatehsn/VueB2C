@@ -6,7 +6,17 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import 'bootstrap';
- 
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.min.css';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faCoffee } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faAsterisk } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+library.add(faCoffee, faSpinner,faAsterisk)
+
+Vue.component('font-awesome-icon', FontAwesomeIcon)
+Vue.component('Loading', Loading)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 

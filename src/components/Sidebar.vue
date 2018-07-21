@@ -6,24 +6,30 @@
         <ul class="nav flex-column">
             <li class="nav-item">
             <a class="nav-link active" href="#">
+                <font-awesome-icon icon="coffee" />
                 <span data-feather="home"></span>
                 Dashboard <span class="sr-only">(current)</span>
             </a>
             </li>
             <li class="nav-item">
             <a class="nav-link" href="#">
+                <font-awesome-icon icon="spinner" spin />
+                
                 <span data-feather="file"></span>
                 Orders
             </a>
             </li>
             <li class="nav-item">
             <a class="nav-link" href="#">
+                <font-awesome-icon icon="spinner" pulse />
+                <!-- <font-awesome-icon :icon="myIcon" /> -->
                 <span data-feather="shopping-cart"></span>
                 Products
             </a>
             </li>
             <li class="nav-item">
             <a class="nav-link" href="#">
+                <font-awesome-icon icon="asterisk" pulse />
                 <span data-feather="users"></span>
                 Customers
             </a>
@@ -81,14 +87,16 @@
 
 
 
-<script>
-export default {
-//   name: 'Login',
-//   data(){
-    
-//   },
+// <script>
+// import { faAsterisk } from '@fortawesome/free-solid-svg-icons'
+// export default {
+//    data(){
+//     return {
+//         myIcon: faAsterisk
+//     }
+//    },
 //   methods:{
     
 //   }
-}
+//}
 </script>

@@ -1,5 +1,7 @@
 <template>
 <div>
+    
+     <Loading :active.sync="isLoading"></Loading>
     <div class="text-right mt-4">
         <!-- <button class="btn btn-primary"  data-toggle="modal" data-target="#productModal">建立新產品</button> -->
         <button class="btn btn-primary"  @click="openModal(true)">建立新產品</button>
@@ -59,12 +61,14 @@
                 </div>
                 <div class="form-group">
                   <label for="customFile">或 上傳圖片
-                    <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i>
+                    <!-- <i class="fas fa-spinner fa-spin" v-if="status.fileUploading"></i> -->
+                    <font-awesome-icon icon="spinner" spin v-if="status.fileUploading"/>
                   </label>
                   <input type="file" id="customFile" class="form-control"
                     ref="files" @change="uploadFile">
                 </div>
                 <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
+
               </div>
               <div class="col-sm-8">
                 <div class="form-group">
@@ -177,15 +181,18 @@ export default {
             status:{
                 fileUploading:false
             },
-            isNew: false
+            isNew: false,
+            isLoading: false
         };
     },
     methods:{
         getProducts(){
             const vm = this;
+            vm.isLoading = true;
             this.$http.get(`${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/products/all`).then((response) => {
                 console.log(response.data)
                 if(response.data.success){
+                    vm.isLoading = false;
                     vm.products = response.data.products
                 }else{
                     vm.$router.push('/login');
@@ -245,7 +252,7 @@ export default {
             const formData = new FormData();
             formData.append('file-to-upload', uploadedFile);
             const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/upload`;
-            vm.status.fileUploading = true;
+             vm.status.fileUploading = true;
             this.$http.post(url, formData, {
                 headers: {
                 'Content-Type': 'multipart/form-data',
@@ -256,9 +263,9 @@ export default {
                 if (response.data.success) {
                 // vm.tempProduct.imageUrl = response.data.imageUrl;
                 // console.log(vm.tempProduct);
-                vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
+                    vm.$set(vm.tempProduct, 'imageUrl', response.data.imageUrl);
                 } else {
-                this.$bus.$emit('messsage:push', response.data.message, 'danger');
+                    this.$bus.$emit('messsage:push', response.data.message, 'danger');
                 }
             });
         }
