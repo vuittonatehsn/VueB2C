@@ -1,7 +1,7 @@
 <template>
 <div>
     
-     <Loading :active.sync="isLoading"></Loading>
+    <Loading :active.sync="isLoading"></Loading>
     <div class="text-right mt-4">
         <!-- <button class="btn btn-primary"  data-toggle="modal" data-target="#productModal">建立新產品</button> -->
         <button class="btn btn-primary"  @click="openModal(true)">建立新產品</button>
@@ -22,8 +22,8 @@
             <tr v-for="item in products" :key="item.id" v-if="item.id">
                 <td>{{item.category}}</td>
                 <td>{{item.title}}</td>
-                <td class="text-right">{{item.origin_price}}</td>
-                <td class="text-right">{{item.price}}</td>
+                <td class="text-right">{{item.origin_price | currency}}</td>
+                <td class="text-right">{{item.price | currency}}</td>
                 <td>
                     <span v-if="item.is_enabled" class="text-success">啟動</span>
                     <span v-else>未啟動</span>
@@ -35,8 +35,8 @@
             </tr>
         </tbody>
     </table>
-
-    <!-- <Pagination :pages="pagination" @emitPages="getProducts"></Pagination> -->
+    
+    <Pagination :pages="pagination" @emitPages="getProducts"></Pagination>
     <!-- Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
       aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -172,6 +172,7 @@
 
 <script>
 import $ from 'jquery';
+import Pagination from '../Pagination';
 
 export default {
     data(){
@@ -182,22 +183,29 @@ export default {
                 fileUploading:false
             },
             isNew: false,
-            isLoading: false
+            isLoading: false,
+            pagination: {},
         };
     },
+    components: {
+        Pagination,
+    },
     methods:{
-        getProducts(){
+        getProducts(page = 1) {
+            const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/products?page=${page}`; // 'http://localhost:3000/api/casper/products';
             const vm = this;
+            //console.log(process.env.APIisLoadingPATH, process.env.CUSTOMPATH);
             vm.isLoading = true;
-            this.$http.get(`${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/products/all`).then((response) => {
-                console.log(response.data)
+            this.$http.get(api).then((response) => {
+                console.log(response.data);
                 if(response.data.success){
-                    vm.isLoading = false;
-                    vm.products = response.data.products
-                }else{
-                    vm.$router.push('/login');
+                        vm.isLoading = false;
+                        vm.products = response.data.products
+                        vm.pagination = response.data.pagination;
+                    }else{
+                        vm.$router.push('/login');
                 }
-            })
+            });
         },
         openModal(isNew, item){
             if (isNew) {

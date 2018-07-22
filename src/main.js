@@ -14,11 +14,14 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { faAsterisk } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 library.add(faCoffee, faSpinner,faAsterisk)
+import './bus';
+import currencyFilter from './filters/currency';
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Loading', Loading)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
+Vue.filter('currency', currencyFilter);
 
 /* eslint-disable no-new */
 new Vue({
