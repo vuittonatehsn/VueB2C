@@ -12,17 +12,23 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { faAsterisk } from '@fortawesome/free-solid-svg-icons'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-library.add(faCoffee, faSpinner,faAsterisk)
+library.add(faCoffee, faSpinner,faAsterisk,faTrash)
 import './bus';
 import currencyFilter from './filters/currency';
+import dateFilter from './filters/date';
+import VeeValidate from 'vee-validate';
+import zhTWValidate from 'vee-validate/dist/locale/zh_TW';
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Loading', Loading)
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 Vue.filter('currency', currencyFilter);
-
+Vue.filter('date', dateFilter);
+VeeValidate.Validator.localize('zh_TW', zhTWValidate);
+Vue.use(VeeValidate);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
@@ -42,6 +48,7 @@ router.beforeEach((to, from, next)=>{
         console.log('驗證成功');
         next();
       }else{
+        console.log('驗證失敗');
         next({
             path:'/login'
         });

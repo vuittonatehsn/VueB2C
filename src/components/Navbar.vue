@@ -5,7 +5,11 @@
       <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Sign out</a>
+           <a class="nav-link" href="#"  @click.prevent="signout" >Sign out</a>
+          <!-- 這會直接倒頁，失敗 -->
+          <!-- <router-link to="./HelloWorld" @click="signout" class="nav-link ">
+              登出
+          </router-link> -->
         </li>
       </ul>
     </nav>
@@ -16,14 +20,23 @@
 
 <script>
 export default {
-//   name: 'Login',
-//   data(){
-//     return {
+  name: 'Navbar',
+  data(){
+    return {
       
-//     };
-//   },
-//   methods:{
-    
-//   }
+    };
+  },
+  methods:{
+    signout(){
+      const vm = this;
+      //console.log(vm.user)
+      this.$http.post(`${process.env.APIPATH}/logout`).then((response) => {
+        console.log(response.data)
+        if(response.data.success){
+          vm.$router.push('/login');
+        }
+      })
+    }
+  }
 }
 </script>
