@@ -27,7 +27,7 @@ export default {
         Navbar,
         AlertMessage
     },
-    name: 'Login',
+    name: 'Dashboard',
     data(){
         return {
         
