@@ -127,6 +127,7 @@
       </div>
 
     </div>
+    
     <div class="my-5 row justify-content-center">
       <form class="col-md-6" @submit.prevent="createOrder">
         <div class="form-group">

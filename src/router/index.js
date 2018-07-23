@@ -9,6 +9,11 @@ import Orders from '@/components/pages/Orders';
 import CustomerOrder from '@/components/pages/CustomerOrders';
 import CustomerCheckout from '@/components/pages/CustomerCheckout';
 
+import shoppingCart from '@/components/ShoppingCart';
+import ShoppingCartCheckout from '@/components/shoppingCart/ShoppingCartCheckout';
+import ShoppingCartProduct from '@/components/shoppingCart/ShoppingCartProduct';
+import ShoppingCartPurchase from '@/components/shoppingCart/ShoppingCartPurchase';
+
 Vue.use(Router)
 
 export default new Router({
@@ -22,7 +27,27 @@ export default new Router({
       path: '/',
       name: 'HelloWorld',
       component: HelloWorld,
-      meta:{requiresAuth:true}
+      //meta:{requiresAuth:true}
+    },
+    {
+      path: '/shoppingCart',
+      name: 'ShoppingCart',
+      component: shoppingCart,
+    },
+    {
+      path: '/shoppingCart-checkout',
+      name: 'ShoppingCartCheckout',
+      component: ShoppingCartCheckout,
+    },
+    {
+      path: '/shoppingCart-product',
+      name: 'ShoppingCartProduct',
+      component: ShoppingCartProduct,
+    },
+    {
+      path: '/shoppingCart-purchase',
+      name: 'ShoppingCartPurchase',
+      component: ShoppingCartPurchase,
     },
     {
       path: '/login',
