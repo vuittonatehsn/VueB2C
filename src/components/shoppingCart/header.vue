@@ -10,7 +10,7 @@
       <div class="dropdown ml-auto">
         <button class="btn btn-sm btn-cart" data-toggle="dropdown" data-flip="false">
           <!-- <font-awesome-icon icon="shopping-cart"/> -->
-          <icon name="beer"></icon>
+     
           <i class="fa fa-shopping-cart text-dark fa-2x" aria-hidden="true"></i>
           <span class="badge badge-pill badge-danger">9</span>
           <span class="sr-only">unread messages</span>
