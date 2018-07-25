@@ -14,6 +14,8 @@ import ShoppingCartCheckout from '@/components/shoppingCart/ShoppingCartCheckout
 import ProductDetail from '@/components/shoppingCart/ProductDetail';
 import ShoppingCartPurchase from '@/components/shoppingCart/ShoppingCartPurchase';
 
+import City from '@/components/shoppingCart/City'
+
 Vue.use(Router)
 
 export default new Router({
@@ -45,7 +47,7 @@ export default new Router({
       component: ProductDetail,
     },
     {
-      path: '/shoppingCart-purchase',
+      path: '/shoppingCart-purchase/:orderId',
       name: 'ShoppingCartPurchase',
       component: ShoppingCartPurchase,
     },
@@ -53,6 +55,11 @@ export default new Router({
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/city',
+      name: 'City',
+      component: City
     },
     {
       path: '/admin',

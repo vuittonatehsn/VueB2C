@@ -1,7 +1,7 @@
 <template>
 <div>
   <!-- headers -->
-  <Header></Header>
+  <Header :msgChild.sync="msgChild"></Header>
   <div class="jumbotron jumbotron-fluid jumbotron-bg d-flex align-items-end">
     <div class="container">
       <div class="p-3 bg-lighter">
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="container main-contant mb-1">
-    <ProductList></ProductList>
+    <ProductList @emitGetCart="getCartCount"></ProductList>
   </div>
   <!-- footer -->
   <Footer></Footer>
@@ -41,11 +41,26 @@ export default {
     name: 'ShoppingCart',
     data(){
         return {
-        
+          msgChild:0,
+          cart:{}
         };
     },
     methods:{
-        
+        getCart() {
+          const vm = this;
+          const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
+          vm.isLoading = true;
+          this.$http.get(url).then((response) => {
+            vm.cart = response.data.data;
+            // console.log('header', vm.cart.carts.length);
+            vm.isLoading = false;
+          });
+          
+        },
+        getCartCount(){
+          //console.log('getCount',carts);
+          this.msgChild++;
+        }
     }
 }
 </script>

@@ -76,7 +76,7 @@
         </div>
       </div>
     </div>
-
+    <!-- 套用優惠價 -->
     <div class="my-5 row justify-content-center">
       <div class="col-md-6">
         <table class="table">
@@ -127,7 +127,7 @@
       </div>
 
     </div>
-    
+    <!-- 會員訂購資料 -->
     <div class="my-5 row justify-content-center">
       <form class="col-md-6" @submit.prevent="createOrder">
         <div class="form-group">

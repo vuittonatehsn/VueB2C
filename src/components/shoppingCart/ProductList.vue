@@ -153,7 +153,10 @@ export default {
       this.$http.post(url, { data: cart }).then(response => {
         console.log(response);
         vm.status.loadingItem = "";
-        vm.getCart();
+        //vm.getCart();
+        this.$emit('emitGetCart');
+        // console.log(vm.$refs.header);
+       
         $("#productModal").modal("hide");
       });
     }
@@ -164,6 +167,7 @@ export default {
   },
   created() {
     this.getProducts();
+    
   }
 };
 </script>
