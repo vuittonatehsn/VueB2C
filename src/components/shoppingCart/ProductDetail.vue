@@ -1,6 +1,6 @@
 <template>
 <div>
-  <Header></Header>
+  <Header :msgChild.sync="msgChild"></Header>
   <loading :active.sync="isLoading"></loading>
   <div class="container main-contant mb-1">
     <nav aria-label="breadcrumb" role="navigation">
@@ -104,6 +104,7 @@ export default {
       cart: {},
       isLoading: false,
       productId: "",
+      msgChild:0,
     };
   },
   components:{
@@ -134,6 +135,7 @@ export default {
       this.$http.post(url, { data: cart }).then(response => {
         console.log(response);
         vm.status.loadingItem = "";
+        this.msgChild++;
       });
     },
     

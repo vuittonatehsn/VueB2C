@@ -8,26 +8,26 @@
   <div class="row">
     <div class="col-md-2">
       <!-- 左側選單 (List group) -->
-      <LeftBar></LeftBar>
+      <LeftBar :categories="categories" @emitSetFilter="SetFilter"></LeftBar>
     </div>
     <div class="col-md-10">
       <div class="d-flex mb-4">
         <!-- Search bar -->
         <form class="form-inline my-3 my-lg-0">
           <div class="input-group">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            <input class="form-control" type="text" placeholder="分類搜尋" aria-label="Search" v-model="filter">
             <div class="input-group-append">
-              <button class="btn btn-outline-warning" type="submit">
-                <i class="fa fa-search" aria-hidden="true"></i> Search</button>
+              <button class="btn btn-outline-warning " type="submit">
+                <i class="fa fa-search" aria-hidden="true" disable></i> Search</button>
             </div>
           </div>
         </form>
       </div>
       <!-- 主要商品列表 (Card) -->
-      <div class="tab-content">
+      <div class="tab-content" >
         <div class="tab-pane active" id="list-gold">
               <div class="row mt-4">
-                <div class="col-md-4 mb-4" v-for="item in products" :key="item.id">
+                <div class="col-md-4 mb-4" v-for="item in getDataComputed" :key="item.id" id="`#${item.category}`">
                   <div class="card border-0 shadow-sm">
                     <div style="height: 150px; background-size: cover; background-position: center"
                       :style="{backgroundImage: `url(${item.imageUrl})`}">
@@ -61,12 +61,11 @@
                   </div>
                 </div>
 
-                <div class="col-md-4 mb-4">
+                <!-- <div class="col-md-4 mb-4">
                     <div class="card border-0 box-shadow text-center h-100">
                         <div style="height: 150px; background-size: cover; background-position: center"
                         :style="{backgroundImage: `url(https://images.unsplash.com/photo-1485373650022-3ed53f62b8f3?w=634)`}">
-                        <!-- <img class="card-img-top" src="https://images.unsplash.com/photo-1485373650022-3ed53f62b8f3?w=634" alt="Card image cap"> -->
-                        </div>
+                       </div>
                         <div class="card-body">
                           <h4 class="card-title">變聲領帶</h4>
                           <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content
@@ -78,7 +77,7 @@
                           </a>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
               </div>
         </div>
@@ -125,7 +124,10 @@ export default {
         loadingItem: ""
       },
       pagination: {},
-      isLoading: false
+      paginationStorage:{},
+      isLoading: false,
+      categories: [],
+      filter:''
     };
   },
   methods: {
@@ -139,7 +141,14 @@ export default {
         vm.products = response.data.products;
         console.log(response);
         vm.isLoading = false;
+        vm.paginationStorage = response.data.pagination;
         vm.pagination = response.data.pagination;
+        let temp = [];
+        vm.categories = response.data.products.forEach(element => {
+          if(!temp.includes(element.category))
+            temp.push(element.category);
+        });
+        vm.categories = temp;
       });
     },
     addtoCart(id, qty = 1) {
@@ -157,8 +166,10 @@ export default {
         this.$emit('emitGetCart');
         // console.log(vm.$refs.header);
        
-        $("#productModal").modal("hide");
       });
+    },
+    SetFilter(item = ''){
+      this.filter = item;
     }
   },
   components: {
@@ -168,6 +179,28 @@ export default {
   created() {
     this.getProducts();
     
+  },
+  computed:{
+    getDataComputed(item = ""){
+      //console.log(item)
+      const vm = this
+      const tempData = [];
+      const selectLocation = vm.filter
+      if(vm.filter === 'all'){
+        vm.pagination = vm.paginationStorage;
+      }else if(vm.filter !== ''){
+        vm.products.forEach(e =>{
+          if (vm.filter === e.category) {
+            tempData.push(e);
+          }
+        })
+        console.log('templData', tempData)
+        vm.pagination = [];
+        return tempData;
+
+      } 
+      return this.products;
+    }
   }
 };
 </script>
