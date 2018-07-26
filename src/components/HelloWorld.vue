@@ -5,19 +5,16 @@
     <h2>Essential Links</h2>
     <ul>
       <li>
-        <a
-          href="https://vuejs.org"
-          target="_blank"
-        >
-          Core Docs
+        <a href="./login" target="_blank">
+          Login
         </a>
       </li>
       <li>
         <a
-          href="https://forum.vuejs.org"
+          href="./admin/orders"
           target="_blank"
         >
-          Forum
+          admin
         </a>
       </li>
       <li>
